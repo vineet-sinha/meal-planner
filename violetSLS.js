@@ -5,8 +5,8 @@
 // initialize the engine - and setup an appName so that Violet does not launch the standalone server automatically
 const violet = require('violet').script('serverless');
 
-// load the script
-require('./script.js');
+// load the voice app
+require('./app.js');
 
 // compile scripts & register intents
 violet.registerIntents();
