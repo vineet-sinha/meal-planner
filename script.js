@@ -1,4 +1,7 @@
-const violet = require('violet').script();
+const violet = require('violet').script({
+  invocationName: 'meal planner'
+});
+
 
 // the model
 var model = {};
@@ -10,6 +13,7 @@ var app = {
       mealName: response.get('mealName'),
       mealType: response.get('mealType')
     };
+    response.say(`Great.`);
   },
   checkDinnerTonight: (response)=>{
     if (Object.keys(model).length == 0)
@@ -18,6 +22,7 @@ var app = {
       response.say(`Sorry, I do not have anything planned for tonight`);
     if (Object.keys(model).length)
       response.say(`Sorry, I only have planned for ${plannedDay}`);
+    response.say(`I am not sure.`);
   }
 };
 
@@ -38,7 +43,7 @@ action:
   - modify
  */
 
-violet.addInputType({
+violet.addInputTypes({
   mealName: "phrase",
   mealType: {
     type: "mealTypeName",
@@ -58,7 +63,7 @@ violet.addFlowScript(`<app>
   </choice>
 
   <choice id="queryDinnerTonight">
-    <expecting>What are we making today for dinner<expecting>
+    <expecting>What are we making today for dinner</expecting>
     <resolve value="app.checkDinnerTonight(response)"/>
   </choice>
 
@@ -84,4 +89,4 @@ violet.addFlowScript(`<app>
     <resolve value="app.planMeal(response)"/>
   </dialog>
 
-</app>`, app);
+</app>`, {app});
