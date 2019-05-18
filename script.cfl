@@ -1,0 +1,35 @@
+<app>
+
+  <choice id="launch">
+    <expecting>What can you do</expecting>
+    <say>I can help you track your meal planning.</say>
+  </choice>
+
+  <choice id="queryDinnerTonight">
+    <expecting>What are we making today for dinner</expecting>
+    <resolve value="app.checkDinnerTonight(response)"/>
+  </choice>
+
+  <dialog elicit="dialog.nextReqdParam()">
+    <expecting>Lets plan a meal</expecting>
+    <expecting>Lets plan a [[mealType]]</expecting>
+    <expecting>Lets plan a meal for [[mealDay]]</expecting>
+    <expecting>Lets plan a meal to have [[mealName]] for [[mealType]] on [[mealDay]]</expecting>
+
+    <item name="mealDay" required>
+      <ask>What day would you like to make it</ask>
+      <expecting>I would like to make it on [[mealDay]]</expecting>
+      <expecting>Make it on [[mealDay]]</expecting>
+    </item>
+    <item name="mealType" required>
+      <ask>Would it be breakfast, lunch, or dinner</ask>
+      <expecting>It would be [[mealType]]</expecting>
+    </item>
+    <item name="mealName" required>
+      <ask>What would you like the meal to be called</ask>
+      <expecting>I would like to call it [[mealName]]</expecting>
+    </item>
+    <resolve value="app.planMeal(response)"/>
+  </dialog>
+
+</app>
