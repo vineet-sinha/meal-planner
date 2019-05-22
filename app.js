@@ -20,8 +20,10 @@ var app = {
       response.say(`Sorry, I do not have anything planned yet`);
     if (!model['today'])
       response.say(`Sorry, I do not have anything planned for tonight`);
-    if (Object.keys(model).length)
+    if (Object.keys(model).length) {
+      var plannedDay = 'someday'
       response.say(`Sorry, I only have planned for ${plannedDay}`);
+    }
     response.say(`I am not sure.`);
   }
 };

@@ -1,7 +1,7 @@
 
 # Meal Planner
 
-This project implements a Voice App to help plan meals. The Voice Conversation is built using the [Violet](https://helloviolet.ai/) framework and is deployed using the [Serverless Framework](https://serverless.com/). The primary instance of this runs on [AWS Lambda](https://aws.amazon.com/lambda/) and [AWS Aurora Serverless](https://aws.amazon.com/rds/aurora/serverless/).
+This project implements a Voice App to help plan meals. The Voice Conversation is built using the [Violet](https://helloviolet.ai/) framework and is deployed using the [Serverless Framework](https://serverless.com/). The primary instance of this runs on [AWS Lambda](https://aws.amazon.com/lambda/) and [AWS DynamDB](https://aws.amazon.com/dynamodb/).
 
 ### Running
 
