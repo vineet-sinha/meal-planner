@@ -2,6 +2,21 @@ const violet = require('violet').script({
   invocationName: 'meal planner'
 });
 
+/*
+model:
+ * plan meals for the week
+    - day (mon, ...)
+    - type of meal (breakfast, lunch, dinner)
+    - meal/dish name
+    - cuisine (optional)
+    - ingredients (optional)
+  - track of grocery items
+  - track favorites
+action:
+  - query/find items
+  - create/add to the meal planner
+  - modify
+ */
 
 // the model
 var model = {};
@@ -28,22 +43,6 @@ var app = {
   }
 };
 
-// the script
-/*
-model:
- * plan meals for the week
-    - day (mon, ...)
-    - type of meal (breakfast, lunch, dinner)
-    - meal/dish name
-    - cuisine (optional)
-    - ingredients (optional)
-  - track of grocery items
-  - track favorites
-action:
-  - query/find items
-  - create/add to the meal planner
-  - modify
- */
 
 violet.addInputTypes({
   mealName: "phrase",
@@ -51,10 +50,12 @@ violet.addInputTypes({
     type: "mealTypeName",
     values: ["breakfast", "lunch", "dinner"]
   },
+  // mealDay: "date",
   mealDay: {
     type: "mealDayName",
     values: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
   },
 });
 
+// the script
 violet.loadFlowScript('script.cfl', {app});
