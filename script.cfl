@@ -5,12 +5,89 @@
     <say>I can help you track your meal planning.</say>
   </choice>
 
-  <choice id="queryDinnerTonight">
-    <expecting>What are we making today for dinner</expecting>
-    <resolve value="app.checkDinnerTonight(response)"/>
+  <choice id="openEnded">
+    <expecting>What are we making</expecting>
+    <check value="app.anyMealsPlannedOpenEnded(response)">
+      <case value="planned">
+        <say>We have [[mealName]] planned for [[mealType]] on [[mealDay]]</say>
+        <decision>
+          <ask>Would you like to delay it</ask>
+          <choice>
+            <expecting>{Delay|Change} it to [[newMealDay]]</expecting>
+            <resolve value="app.updateDate(response)">
+              <say>Updated [[mealName]] to now be made on [[mealDay]]</say>
+            </resolve>
+          </choice>
+          <choice>
+            <expecting>Change it to [[newMealType]]</expecting>
+            <resolve value="app.updateMealType(response)">
+              <say>Updated [[mealName]] to now be made a [[mealType]]</say>
+            </resolve>
+          </choice>
+          <choice>
+            <expecting>No thanks</expecting>
+            <say>Sounds good</say>
+          </choice>
+        </decision>
+      </case>
+      <case value="nonePlannedThisWeek">
+        <say>Sorry, I do not have anything planned this week</say>
+      </case>
+      <default>
+        <say>Sorry, I am not sure</say>
+      </default>
+    </check>
   </choice>
 
-  <dialog elicit="dialog.nextReqdParam()">
+  <choice id="queryGeneric">
+    <expecting>What are we making [[mealDay]] for [[mealType]]</expecting>
+    <check value="app.anyMealsPlannedGeneric(response)">
+      <case value="planned">
+        <sayOne>
+          <say>We have [[mealName]] planned for [[mealDay]]</say>
+          <say>For [[mealDay]] we have [[mealName]] planned</say>
+        </sayOne>
+      </case>
+      <case value="plannedButDifferentMeal">
+        <say>Sorry, I do not have anything planned for [[mealType]] but do have plans for [[availMealType]]</say>
+      </case>
+      <case value="plannedButOtherTimeInWeek">
+        <say>Sorry, I do not have anything planned for [[mealDay]] but do have plans for [[availMealDay]]</say>
+      </case>
+      <case value="nonePlannedThisWeek">
+        <say>Sorry, I do not have anything planned this week</say>
+      </case>
+      <default>
+        <say>Sorry, I am not sure</say>
+      </default>
+    </check>
+  </choice>
+
+  <choice id="queryDinnerTonight">
+    <expecting>What are we making today for dinner</expecting>
+    <check value="app.anyMealsPlannedTonight(response)">
+      <case value="planned">
+        <sayOne>
+          <say>We have [[mealName]] planned for tonight</say>
+          <say>Tonight we have [[mealName]] planned</say>
+        </sayOne>
+      </case>
+      <case value="plannedOnlyOtherMeals">
+        <say>Sorry, I do not have anything planned for tonight</say>
+      </case>
+      <case value="plannedOnlyLaterThisWeek">
+        <say>Sorry, I only have plans for later this week</say>
+      </case>
+      <case value="nonePlanned">
+        <say>Sorry, I do not have anything planned yet</say>
+      </case>
+      <default>
+        <say>Sorry, I am not sure</say>
+      </default>
+    </check>
+  </choice>
+
+  <dialog id="addMealPlan" elicit="dialog.nextReqdParam()">
     <expecting>Lets plan a meal</expecting>
     <expecting>Lets plan a [[mealType]]</expecting>
     <expecting>Lets plan a meal for [[mealDay]]</expecting>

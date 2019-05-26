@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.460.0",
+    "uuid": "^3.3.2",
     "violet": "^0.16.0"
   }
 }
