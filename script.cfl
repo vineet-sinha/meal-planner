@@ -9,7 +9,7 @@
     <expecting>What are we making</expecting>
     <check value="app.anyMealsPlannedOpenEnded(response)">
       <case value="planned">
-        <say>We have [[mealName]] planned for [[mealType]] on [[mealDay]]</say>
+        <say>We have [[mealName]] planned for [[mealType]] on [[mealDayPretty]]</say>
         <decision>
           <ask>Would you like to delay it</ask>
           <choice>
@@ -52,7 +52,7 @@
         <say>Sorry, I do not have anything planned for [[mealType]] but do have plans for [[availMealType]]</say>
       </case>
       <case value="plannedButOtherTimeInWeek">
-        <say>Sorry, I do not have anything planned for [[mealDay]] but do have plans for [[availMealDay]]</say>
+        <say>Sorry, I do not have anything planned for [[mealDay]] but do have plans for [[availMealDayPretty]]</say>
       </case>
       <case value="nonePlannedThisWeek">
         <say>Sorry, I do not have anything planned this week</say>
