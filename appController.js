@@ -139,7 +139,7 @@ class AppController {
 
   // update records
   async updateDate(response) {
-    await this.plannedMeals.updateKey({
+    await this.plannedMeals.update({
       user_id: response.get('userId'),
       meal_day: response.get('mealDay'),
       meal_type: response.get('mealType'),

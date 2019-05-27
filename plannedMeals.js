@@ -64,7 +64,8 @@ const plannedMeals = {
     return await plannedMeals.query({user_id, meal_day_beg:meal_day, meal_day_end:nextWeek, meal_name, meal_type});
   },
 
-  update: async function({user_id, meal_day, meal_name, meal_type}, newRecVals) {
+  // NOTE: not really called - since we are always in the changing keys during update for this app
+  _rawUpdate: async function({user_id, meal_day, meal_name, meal_type}, newRecVals) {
     // because we dont actually have meal_date_ex and we need it to do an update - we will need to first do a query with a range
     var results = await this.checkDay({user_id, meal_day, meal_type, meal_name});
     var record = results[0];
@@ -77,8 +78,9 @@ const plannedMeals = {
     await dynDB.update(record, newRecVals);
   },
 
-  // dynamodb does not allow changing the value of keys!
-  updateKey: async function({user_id, meal_day, meal_name, meal_type}, newRecVals) {
+  update: async function({user_id, meal_day, meal_name, meal_type}, newRecVals) {
+    // note: when not changing keys we can just short circuit to _rawUpdate above
+    // dynamodb does not allow changing the value of keys - so we need to delete and then create
     // because we dont actually have meal_date_ex and we need it to do an update - we will need to first do a query with a range
     var results = await this.checkDay({user_id, meal_day, meal_type, meal_name});
     var record = results[0];
