@@ -23,22 +23,22 @@ class AppController {
   }
 
   // create records
-  planMeal(response) {
+  async planMeal(response) {
     this.makeDevEasier(response);
 
     if (response.get('mealDay').indexOf('W') != -1) {
       // we do not support week's as days
       response.say(`Sorry. Can you please provide a day?`)
-      return;
+      return false;
     }
 
-    this.plannedMeals.write({
+    var writtenMP = await this.plannedMeals.write({
       user_id: response.get('userId'),
       meal_day: response.get('mealDay'),
       meal_name: response.get('mealName'),
       meal_type: response.get('mealType')
     });
-    response.say(`Great.`);
+    response.set('mealDayPretty', this._dateToRelDay(writtenMP.meal_date_ex));
   }
 
   // query records
@@ -92,7 +92,7 @@ class AppController {
       meal_day: response.get('mealDay'),
     });
     if (results.length > 0) {
-      response.set('availMealDayPretty', this._dateToRelDay(results[0].meal_date_ex));
+      response.set('availMealDayPretty', this._dateToRelDay(results[0].meal_date_ex, 'on'));
       return 'plannedButOtherTimeInWeek';
     }
     return 'nonePlannedThisWeek';
@@ -112,12 +112,13 @@ class AppController {
       case 2: return 'day after tomorrow';
     }
     if (dateDiff<0 && dateDiff>-7) {
-      return `last ${dayStr[mealDateEx.getUTCDay()]}`;
+      return `on the last ${dayStr[mealDateEx.getUTCDay()]}`;
     }
     if (dateDiff>0 && dateDiff<7) {
-      return `coming ${dayStr[mealDateEx.getUTCDay()]}`;
+      return `on ${dayStr[mealDateEx.getUTCDay()]}`;
+      // return `on the coming ${dayStr[mealDateEx.getUTCDay()]}`;
     }
-    return ` ${mealDateEx.getUTCDate()} ${monthStr[mealDateEx.getUTCMonth()]}`;
+    return ` on the <say-as interpret-as="ordinal">${mealDateEx.getUTCDate()}</say-as> ${monthStr[mealDateEx.getUTCMonth()]}`;
   }
 
   async anyMealsPlannedOpenEnded(response) {

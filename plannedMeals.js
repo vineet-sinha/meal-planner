@@ -30,6 +30,8 @@ const plannedMeals = {
     delete mealPlan.meal_day; // we don't save it - can be retrieved from meal_date_ex
 
     await dynDB.insert(mealPlan);
+
+    return mealPlan;
   },
 
   query: async function(mealPlan /*{user_id, meal_day_beg, meal_day_end, meal_name, meal_type}*/) {

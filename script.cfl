@@ -9,7 +9,7 @@
     <expecting>What are we making</expecting>
     <check value="app.anyMealsPlannedOpenEnded(response)">
       <case value="planned">
-        <say>We have [[mealName]] planned for [[mealType]] on [[mealDayPretty]]</say>
+        <say>We have [[mealName]] planned for [[mealType]] [[mealDayPretty]]</say>
         <decision>
           <ask>Would you like to delay it</ask>
           <choice>
@@ -106,7 +106,18 @@
       <ask>What would you like the meal to be called</ask>
       <expecting>I would like to call it [[mealName]]</expecting>
     </item>
-    <resolve value="app.planMeal(response)"/>
+    <resolve value="app.planMeal(response)">
+      <sayOne>
+        <say>Great.</say>
+        <say>Got it.</say>
+        <say>Awesome.</say>
+      </sayOne>
+      <sayOne>
+        <say>[[mealName]] for [[mealType]] [[mealDayPretty]]</say>
+        <say>We will be making [[mealName]] for [[mealType]] [[mealDayPretty]]</say>
+        <say>[[mealDayPretty]] We will be making [[mealName]] for [[mealType]]</say>
+      </sayOne>
+    </resolve>
   </dialog>
 
 </app>
