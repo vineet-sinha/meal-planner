@@ -15,11 +15,10 @@ violet.addInputTypes({
   newMealType: "mealTypeName",
   mealDay: "date",
   newMealDay: "date",
-  // mealDay: {
-  //   type: "mealDayName",
-  //   values: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-  // },
 });
 
 // the script
 violet.loadFlowScript('script.cfl', {app: appController});
+
+// a map of the different expectings
+violet.loadExpectings('expectings.yml');
