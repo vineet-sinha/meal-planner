@@ -75,6 +75,8 @@ functions:
       - http:
           path: alexa
           method: post
+      - alexaSkill:
+          appId: amzn1.ask.skill.2189c9b0-8ff9-45fc-b04c-f9b7e5ff604d
 
   googleHandler:
     handler: violetSLS.googleHandler
