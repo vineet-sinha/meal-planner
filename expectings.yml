@@ -1,2 +1,16 @@
 launch:
-- Introduce yourself
+  - What can you do
+  - Introduce yourself
+addMealPlan:
+  - I want to cook
+  - "Lets plan {a meal|to cook}"
+  - "{I want to make|lets plan a} [[mealType]]"
+  - Lets plan a meal for [[mealDay]]
+  - "{I want to make|lets plan a} [[mealType]] for [[mealDay]]"
+  - "{I want to|lets plan to} make [[mealName]]"
+queryDinnerTonight:
+  - "What are we {making|having} {today|} for dinner"
+  - "What are we {making|having} tonight"
+queryLunchToday:
+  - "What are we {making|having} today for lunch"
+  - "What are we {making|having} for lunch"

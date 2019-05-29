@@ -2,11 +2,11 @@
 
 // TODO: test for google
 
-// initialize the engine - and setup an appName so that Violet does not launch the standalone server automatically
-const violet = require('violet').script('serverless');
+// initialize the engine - so that Violet does not launch the standalone server automatically
+require('violet').server();
 
 // load the voice app
-require('./app.js');
+const violet = require('./app.js').script;
 
 // compile scripts & register intents
 violet.registerIntents();
@@ -22,7 +22,10 @@ module.exports.violetDevHandler = async (event) => {
 
 // hook up with event handling
 platformsList.forEach(p=>{
-  module.exports[p.endpoint + 'Handler'] = async (event) => {
+  module.exports[p.endpoint + 'Handler'] = async (event, context, callback) => {
+    console.log('===> event: ', Object.keys(event));
+    if (context) console.log('===> context: ', Object.keys(context));
+    if (callback) console.log('===> callback: ', Object.keys(callback));
     try {
       // extremely minimal clone of express
       var response = {
@@ -37,11 +40,24 @@ platformsList.forEach(p=>{
           this.body = '';
         }
       };
-      await p.handleRequest(event /*request*/, response);
-      return {
-        statusCode: 200,
-        body: JSON.stringify(response.body, null, 2),
-      };
+      if (event.httpMethod) {
+        // HTTP requests
+        await p.handleRequest(JSON.parse(event.body), response);
+      } else {
+        // Alexa Skill event requests
+        await p.handleRequest(/*request*/event, response);
+      }
+      // console.log('*** Request handled.... response: ', response.body);
+      if (event.httpMethod) {
+        // HTTP requests
+        return {
+          statusCode: 200,
+          body: JSON.stringify(response.body, null, 2),
+        };
+      } else {
+        // Alexa Skill event requests
+        callback(null, response.body);
+      }
     } catch(e) {
       console.log(`Error with ${p.endpoint} request - received:`, event.body);
       console.log('Error:', e)

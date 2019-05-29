@@ -22,3 +22,6 @@ violet.loadFlowScript('script.cfl', {app: appController});
 
 // a map of the different expectings
 violet.loadExpectings('expectings.yml');
+violet.overwriteCFLExpectings();
+
+module.exports.script = violet;
