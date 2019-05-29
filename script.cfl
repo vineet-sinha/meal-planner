@@ -91,7 +91,8 @@
     <expecting>Lets plan a meal</expecting>
     <expecting>Lets plan a [[mealType]]</expecting>
     <expecting>Lets plan a meal for [[mealDay]]</expecting>
-    <expecting>Lets plan a meal to have [[mealName]] for [[mealType]] on [[mealDay]]</expecting>
+    <expecting>Lets plan to make [[mealName]]</expecting>
+    <!-- <expecting>Lets plan a meal to have [[mealName]] for [[mealType]] on [[mealDay]]</expecting> -->
 
     <item name="mealDay" required>
       <ask>What day would you like to make it</ask>
