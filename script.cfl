@@ -5,6 +5,18 @@
     <say>I can help you track your meal planning.</say>
   </choice>
 
+  <choice id="help">
+    <expecting>Help me</expecting>
+    <say>Ever wanted to keep track of what you are making this week?</say>
+    <say>Now you can do that with voice commands.</say>
+    <say>Meal Planner tracks meals along with what day you are planning to make them as well as whether they are planned for breakfast, lunch, or dinner.</say>
+  </choice>
+
+  <choice id="fallback">
+    <say>Sorry, I am not what to do with that.</say>
+    <jump target="#launch">
+  </choice>
+
   <choice id="openEnded">
     <expecting>What are we making</expecting>
     <check value="app.anyMealsPlannedOpenEnded(response)">
