@@ -23,9 +23,9 @@ module.exports.violetDevHandler = async (event) => {
 // hook up with event handling
 platformsList.forEach(p=>{
   module.exports[p.endpoint + 'Handler'] = async (event, context, callback) => {
-    console.log('===> event: ', Object.keys(event));
-    if (context) console.log('===> context: ', Object.keys(context));
-    if (callback) console.log('===> callback: ', Object.keys(callback));
+    // console.log('===> event: ', Object.keys(event));
+    // if (context) console.log('===> context: ', Object.keys(context));
+    // if (callback) console.log('===> callback: ', Object.keys(callback));
     try {
       // extremely minimal clone of express
       var response = {
@@ -42,10 +42,16 @@ platformsList.forEach(p=>{
       };
       if (event.httpMethod) {
         // HTTP requests
-        await p.handleRequest(JSON.parse(event.body), response);
+        var request = {
+          body: event.body
+        };
+        if (event.headers['Content-Type'] == 'application/json') {
+          request.body = JSON.parse(request.body);
+        }
+        await p.handleRequest(request, response);
       } else {
         // Alexa Skill event requests
-        await p.handleRequest(/*request*/event, response);
+        await p.handleRequest(/*request*/{body: event}, response);
       }
       // console.log('*** Request handled.... response: ', response.body);
       if (event.httpMethod) {
