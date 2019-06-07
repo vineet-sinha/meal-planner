@@ -2,19 +2,39 @@
 
   <choice id="launch">
     <expecting>What can you do</expecting>
-    <say>I can help you track your meal planning.</say>
+    <say>I can help you track your meals for the week.</say>
+    <decision>
+      <ask>Would you like to learn more or hear what you can say?</ask>
+      <choice>
+        <expecting>Yes {Please|}</expecting>
+        <expecting>{Learn|} More</expecting>
+        <jump target="#help">
+      </choice>
+      <choice>
+        <expecting>No {thanks|}</expecting>
+        <say>Sounds good</say>
+      </choice>
+    </decision>
   </choice>
 
   <choice id="help">
     <expecting>Help me</expecting>
-    <say>Ever wanted to keep track of what you are making this week?</say>
-    <say>Now you can do that with voice commands.</say>
-    <say>Meal Planner tracks meals along with what day you are planning to make them as well as whether they are planned for breakfast, lunch, or dinner.</say>
+    <expecting>What {to|can I} say</expecting>
+    <say>Ever wanted to easily track of what you are making this week?</say>
+    <say keepConversationRunning>Try adding a meal or seeing what is being made for dinner.</say>
   </choice>
 
   <choice id="fallback">
     <say>Sorry, I am not what to do with that.</say>
     <jump target="#launch">
+  </choice>
+
+  <choice id="stop">
+    <say>Goodbye.</say>
+  </choice>
+
+  <choice id="cancel">
+    <say>Goodbye.</say>
   </choice>
 
   <choice id="openEnded">
@@ -37,7 +57,7 @@
             </resolve>
           </choice>
           <choice>
-            <expecting>No thanks</expecting>
+            <expecting>No {thanks|}</expecting>
             <say>Sounds good</say>
           </choice>
         </decision>
