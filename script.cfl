@@ -25,7 +25,7 @@
   </choice>
 
   <choice id="fallback">
-    <say>Sorry, I am not what to do with that.</say>
+    <say>Sorry, I am not sure what to do with that.</say>
     <jump target="#launch">
   </choice>
 
@@ -55,6 +55,19 @@
             <resolve value="app.updateMealType(response)">
               <say>Updated [[mealName]] to now be made a [[mealType]]</say>
             </resolve>
+          </choice>
+          <choice>
+            <expecting>Yes {Please|}</expecting>
+            <decision>
+              <ask>When would you like it to be</ask>
+              <choice>
+                <expecting>On [[newMealDay]]</expecting>
+                <expecting>{Delay|Change} it to [[newMealDay]]</expecting>
+                <resolve value="app.updateDate(response)">
+                  <say>Updated [[mealName]] to now be made on [[mealDay]]</say>
+                </resolve>
+              </choice>
+            </decision>
           </choice>
           <choice>
             <expecting>No {thanks|}</expecting>
