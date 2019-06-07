@@ -1,6 +1,22 @@
 'use strict';
 
-// TODO: test for google
+/////////////////////////////////////////
+// Utilities
+/////////////////////////////////////////
+const __isJSONHeader = (headers)=>{
+  // problem is that 'Content-Type' is case sensitive
+  var contType = headers['Content-Type'];
+  if (!contType) contType = headers['Content-type'];
+  //if (!contType) contType = headers['content-type'];
+
+  if (!contType) return false;
+  if (contType.indexOf('application/json') != -1) return true;
+  return false;
+};
+
+/////////////////////////////////////////
+// Setup
+/////////////////////////////////////////
 
 // initialize the engine - so that Violet does not launch the standalone server automatically
 require('violet').server();
@@ -42,12 +58,12 @@ platformsList.forEach(p=>{
       };
       if (event.httpMethod) {
         // HTTP requests
+        // console.log(`==> httpMethod - event.body: `, event.body);
+        // console.log(`===> Headers: `, event.headers);
         var request = {
           body: event.body
         };
-        if (event.headers['Content-Type'] == 'application/json') {
-          request.body = JSON.parse(request.body);
-        }
+        if (__isJSONHeader(event.headers)) request.body = JSON.parse(request.body);
         await p.handleRequest(request, response);
       } else {
         // Alexa Skill event requests
