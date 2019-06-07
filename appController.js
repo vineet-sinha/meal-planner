@@ -69,9 +69,11 @@ class AppController {
 
   async anyMealsPlannedGeneric(response) {
     this.makeDevEasier(response);
+    var mealDay = response.get('mealDay');
+    if (!mealDay) mealDay = new Date().toISOString(); // no day means today
     var results = await this.plannedMeals.checkDay({
       user_id: response.get('userId'),
-      meal_day: response.get('mealDay'),
+      meal_day: mealDay,
     });
     if (results.length > 0) {
       // check mealType
