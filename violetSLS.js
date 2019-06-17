@@ -64,12 +64,13 @@ platformsList.forEach(p=>{
           body: event.body
         };
         if (__isJSONHeader(event.headers)) request.body = JSON.parse(request.body);
+        console.log('*** Request received.... request: ', JSON.stringify(request.body, null, 2));
         await p.handleRequest(request, response);
       } else {
         // Alexa Skill event requests
         await p.handleRequest(/*request*/{body: event}, response);
       }
-      // console.log('*** Request handled.... response: ', response.body);
+      // console.log('*** Request handled.... response: ', JSON.stringify(response.body, null, 2));
       if (event.httpMethod) {
         // HTTP requests
         return {
