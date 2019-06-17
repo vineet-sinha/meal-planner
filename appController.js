@@ -91,7 +91,7 @@ class AppController {
     }
     results = await this.plannedMeals.checkWeek({
       user_id: response.get('userId'),
-      meal_day: response.get('mealDay'),
+      meal_day: mealDay,
     });
     if (results.length > 0) {
       response.set('availMealDayPretty', this._dateToRelDay(results[0].meal_date_ex, 'on'));
