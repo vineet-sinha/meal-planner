@@ -45,13 +45,15 @@
         <decision>
           <ask>Would you like to delay it</ask>
           <choice>
-            <expecting>{Delay|Change} it to [[newMealDay]]</expecting>
+            <expecting>{Yes|} {delay|change} it to [[newMealDay]]</expecting>
+            <expecting>{to|} [[newMealDay]]</expecting>
             <resolve value="app.updateDate(response)">
               <say>Updated [[mealName]] to now be made on [[mealDay]]</say>
             </resolve>
           </choice>
           <choice>
-            <expecting>Change it to [[newMealType]]</expecting>
+            <expecting>{Yes|} {change|} it to [[newMealType]]</expecting>
+            <expecting>{to|} [[newMealType]]</expecting>
             <resolve value="app.updateMealType(response)">
               <say>Updated [[mealName]] to now be made a [[mealType]]</say>
             </resolve>
@@ -61,7 +63,7 @@
             <decision>
               <ask>When would you like it to be</ask>
               <choice>
-                <expecting>On [[newMealDay]]</expecting>
+                <expecting>{On|} [[newMealDay]]</expecting>
                 <expecting>{Delay|Change} it to [[newMealDay]]</expecting>
                 <resolve value="app.updateDate(response)">
                   <say>Updated [[mealName]] to now be made on [[mealDay]]</say>
@@ -89,15 +91,15 @@
     <check value="app.anyMealsPlannedGeneric(response)">
       <case value="planned">
         <sayOne>
-          <say>We have [[mealName]] planned for [[mealDay]]</say>
-          <say>For [[mealDay]] we have [[mealName]] planned</say>
+          <say>We have [[mealName]] planned for [[mealDayPretty]]</say>
+          <say>For [[mealDayPretty]] we have [[mealName]] planned</say>
         </sayOne>
       </case>
       <case value="plannedButDifferentMeal">
         <say>Sorry, I do not have anything planned for [[mealType]] but do have plans for [[availMealType]]</say>
       </case>
       <case value="plannedButOtherTimeInWeek">
-        <say>Sorry, I do not have anything planned for [[mealDay]] but do have plans for [[availMealDayPretty]]</say>
+        <say>Sorry, I do not have anything planned for [[mealDayPretty]] but do have plans for [[availMealDayPretty]]</say>
       </case>
       <case value="nonePlannedThisWeek">
         <say>Sorry, I do not have anything planned this week</say>
@@ -109,7 +111,7 @@
   </choice>
 
   <choice id="queryDinnerTonight">
-    <expecting>What are we making today for dinner</expecting>
+    <expecting>What are we making tonight for dinner</expecting>
     <check value="app.anyMealsPlannedTonight(response)">
       <case value="planned">
         <sayOne>
@@ -120,7 +122,7 @@
       <case value="plannedOnlyOtherMeals">
         <say>Sorry, I do not have anything planned for tonight</say>
       </case>
-      <case value="plannedOnlyLaterThisWeek">
+      <case value="plannedOnlyLaterInTheWeek">
         <say>Sorry, I only have plans for later this week</say>
       </case>
       <case value="nonePlanned">
@@ -143,10 +145,12 @@
       <ask>What day would you like to make it</ask>
       <expecting>I would like to make it on [[mealDay]]</expecting>
       <expecting>Make it on [[mealDay]]</expecting>
+      <expecting>[[mealDay]]</expecting>
     </item>
     <item name="mealType" required>
       <ask>Would it be breakfast, lunch, or dinner</ask>
       <expecting>It would be [[mealType]]</expecting>
+      <expecting>[[mealType]]</expecting>
     </item>
     <item name="mealName" required>
       <ask>What would you like the meal to be called</ask>
