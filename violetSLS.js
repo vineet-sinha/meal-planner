@@ -44,6 +44,9 @@ platformsList.forEach(p=>{
     // if (callback) console.log('===> callback: ', Object.keys(callback));
     try {
       // extremely minimal clone of express
+      var request = {
+        body: event
+      };
       var response = {
         body: null,
         json: function(obj) {
@@ -60,16 +63,15 @@ platformsList.forEach(p=>{
         // HTTP requests
         // console.log(`==> httpMethod - event.body: `, event.body);
         // console.log(`===> Headers: `, event.headers);
-        var request = {
-          body: event.body
-        };
+        request.body = request.body.body;
         if (__isJSONHeader(event.headers)) request.body = JSON.parse(request.body);
         console.log('*** Request received.... request: ', JSON.stringify(request.body, null, 2));
-        await p.handleRequest(request, response);
       } else {
-        // Alexa Skill event requests
-        await p.handleRequest(/*request*/{body: event}, response);
+        // Lambda event requests (Used by Alexa Skill)
       }
+
+      await p.handleRequest(request, response);
+
       // console.log('*** Request handled.... response: ', JSON.stringify(response.body, null, 2));
       if (event.httpMethod) {
         // HTTP requests
