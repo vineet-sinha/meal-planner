@@ -16,7 +16,7 @@ class AppController {
       if (response.get(d) === 'today') response.set(d, new Date());
       if (response.get(d) === 'tomorrow') {
         var mDay = new Date();
-        mDay.setDate(day.getDate()+1)
+        mDay.setDate(mDay.getDate()+1)
         response.set(d, mDay);
       }
     });
@@ -26,7 +26,11 @@ class AppController {
   async planMeal(response) {
     this.makeDevEasier(response);
 
-    if (response.get('mealDay').indexOf('W') != -1) {
+    var mealDay = response.get('mealDay');
+    if (!mealDay) mealDay = new Date();
+    if (mealDay instanceof Date) mealDay = mealDay.toISOString(); // no day means today
+
+    if (mealDay.indexOf('W') != -1) {
       // we do not support week's as days
       response.say(`Sorry. Can you please provide a day?`)
       return false;
@@ -34,7 +38,7 @@ class AppController {
 
     var writtenMP = await this.plannedMeals.write({
       user_id: response.get('userId'),
-      meal_day: response.get('mealDay'),
+      meal_day: mealDay,
       meal_name: response.get('mealName'),
       meal_type: response.get('mealType')
     });
@@ -70,7 +74,9 @@ class AppController {
   async anyMealsPlannedGeneric(response) {
     this.makeDevEasier(response);
     var mealDay = response.get('mealDay');
-    if (!mealDay) mealDay = new Date().toISOString(); // no day means today
+    if (!mealDay) mealDay = new Date();
+    if (mealDay instanceof Date) mealDay = mealDay.toISOString(); // no day means today
+    response.set('mealDayPretty', this._dateToRelDay(mealDay));
     var results = await this.plannedMeals.checkDay({
       user_id: response.get('userId'),
       meal_day: mealDay,
