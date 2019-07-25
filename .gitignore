@@ -4,3 +4,8 @@ jspm_packages
 
 # Serverless directories
 .serverless
+
+# Temporary Files by Testing Tool (bst)
+bst-debug.log
+testingModels
+test_output

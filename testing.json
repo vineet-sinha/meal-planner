@@ -1,0 +1,18 @@
+{
+  "--note--": "Amazon Alexa Specific",
+  "handler": "violetSLS.alexaHandler",
+  "interactionModel": "testingModels/alexa/en-US.json",
+
+  "--note--": "Google DialogFlow Specific",
+  "--note--": "NOTE: Requires running: `node app.js` in a seperate window",
+  "--note--": "NOTE: We do not want to test using the handler setting for Google since it does an HTTP Request on us",
+  "--note--": "TODO: Figure out bug with the expressModule setting in BST",
+  "actionURL": "http://localhost:8080/google",
+  "dialogFlowDirectory": "testingModels/dialogFlow",
+  "filter": "tests/alignGoogleFilter.js",
+
+  "trace": false,
+  "jest": {
+    "silent": false
+  }
+}

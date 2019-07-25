@@ -1,0 +1,23 @@
+## GENERAL
+### SETUP
+mkdir testingModels
+
+## ALEXA
+### SETUP
+curl 'http://localhost:8080/alexa?schema=true&schemaType=askcli' --output testingModels/alexa/en-US.json
+
+### RUN TESTS
+bst test
+DEBUG=engine:* bst test
+::OLD:: DEBUG=alexaAPI,engine:* bst test
+
+== GOOGLE DIALOGFLOW ==
+### SETUP
+curl http://localhost:8080/googleConfig --output testingModels/dialogFlow.zip
+unzip testingModels/dialogFlow.zip -d testingModels/dialogFlow
+node app.js
+
+### RUN TESTS
+bst test --platform google
+DEBUG=engine:* bst test
+::OLD:: DEBUG=googleAPI,engine:* bst test

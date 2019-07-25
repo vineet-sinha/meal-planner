@@ -1,0 +1,122 @@
+# some of this is unneccessarily thorough - as it is also testing the framework
+---
+configuration:
+  locales: en-US
+
+---
+- LaunchRequest:
+  - prompt: I can help you track your meals for the week.
+  - prompt: Would you like to learn more or hear what you can say?
+  - sessionEnded: false
+
+---
+- "Help me":
+  - prompt: Ever wanted to easily track of what you are making this week?
+  - prompt: Try adding a meal or seeing what is being made for dinner.
+  - sessionEnded: false
+
+---
+- "What are we making":
+  - prompt: Sorry, I do not have anything planned this week
+  - sessionEnded: true
+
+---
+- "What are we making today":
+  - intent: queryGeneric
+    mealDay: today
+  - prompt: Sorry, I do not have anything planned this week
+  - sessionEnded: true
+
+---
+- test: What are we making for breakfast tomorrow
+- "What are we making for breakfast tomorrow":
+  - intent: queryGeneric # needed because we get caught in one of the 'any string' catch alls.
+    mealType: breakfast
+    mealDay: tomorrow
+  - prompt: Sorry, I do not have anything planned this week
+  - sessionEnded: true
+
+---
+- test: What are we making today for dinner
+- "What are we making tonight":
+  - prompt: Sorry, I do not have anything planned yet
+  - sessionEnded: true
+
+---
+# detailed checks since dialogs underpinings are complicated
+- test: Plan scrambled eggs for breakfast tomorrow (detailed checks)
+- "Lets plan a meal":
+  - prompt: What day would you like to make it
+  - sessionEnded: false
+  - sessionAttributes.convoGoalState: addMealPlan
+  - sessionAttributes.convoGoalState: mealDay:queried
+- "I would like to make it on tomorrow":
+  - prompt: Would it be breakfast, lunch, or dinner
+  - sessionEnded: false
+  - sessionAttributes.mealDay: tomorrow
+  - sessionAttributes.convoGoalState: addMealPlan
+  - sessionAttributes.convoGoalState: mealType:queried
+- "It would be breakfast":
+  - prompt: What would you like the meal to be called
+  - sessionEnded: false
+  - sessionAttributes.mealDay: tomorrow
+  - sessionAttributes.mealType: breakfast
+  - sessionAttributes.convoGoalState: addMealPlan
+  - sessionAttributes.convoGoalState: mealName:queried
+- "I would like to call it scrambled eggs":
+  - prompt:
+      - Great.
+      - Got it.
+      - Awesome.
+  - prompt:
+      - /Scrambled eggs for breakfast tomorrow/i
+      - /We will be making scrambled eggs for breakfast tomorrow/i
+      - /Tomorrow We will be making scrambled eggs for breakfast/i
+  - sessionEnded: true
+  - sessionAttributes.mealType: breakfast
+  - sessionAttributes.mealName: scrambled eggs
+
+---
+- test: Check scrambled eggs
+- "What are we making for breakfast tomorrow":
+  - intent: queryGeneric
+    mealType: breakfast
+    mealDay: tomorrow
+  - prompt:
+    - For tomorrow we have scrambled eggs planned
+    - We have scrambled eggs planned for tomorrow
+  - sessionEnded: true
+- "What are we making for lunch tomorrow":
+  - intent: queryGeneric
+    mealType: lunch
+    mealDay: tomorrow
+  - prompt: Sorry, I do not have anything planned for lunch but do have plans for breakfast
+  - sessionEnded: true
+- "What are we making for breakfast today":
+  - intent: queryGeneric
+    mealType: breakfast
+    mealDay: today
+  - prompt: Sorry, I do not have anything planned for today but do have plans for tomorrow
+  - sessionEnded: true
+- "What are we making tonight":
+  - prompt: Sorry, I only have plans for later this week
+  - sessionEnded: true
+
+---
+- test: Plan and check second meal - chicken salad for dinner today
+- "Add a meal": What day would you like to make it
+- "I would like to make it on today": Would it be breakfast, lunch, or dinner
+- "It would be dinner": What would you like the meal to be called
+- "I would like to call it chicken salad":
+  - prompt:
+    - Great.
+    - Got it.
+    - Awesome.
+  - prompt:
+    - /Chicken salad for dinner today/i
+    - /We will be making chicken salad for dinner today/i
+    - /Today We will be making chicken salad for dinner/i
+- "What are we making tonight":
+  - prompt:
+    - We have chicken salad planned for tonight
+    - Tonight we have chicken salad planned
