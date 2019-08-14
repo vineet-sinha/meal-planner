@@ -15,10 +15,13 @@ addMealPlan:
   - "{I want to|lets plan to} make [[mealName]]"
   - Add [[mealName]]
 queryDinnerTonight:
-  - "What are we {making|having} {tonight|}"
-  - "What is being {made|had} {tonight|}"
+  - "What are we {making|having} tonight"
+  - "What is being {made|had} tonight"
+openEnded:
+  - "What are we {making|having}"
+  - "What is being {made|had}"
 queryGeneric:
-  - "What are we {making|having} [[mealDay]] for [[mealType]]"
-  - "What is being {made|had} [[mealDay]] for [[mealType]]"
+  - "What are we {making|having} {[[mealDay]]|} for [[mealType]]"
+  - "What is being {made|had} {[[mealDay]]|} for [[mealType]]"
   - "What are we {making|having} for [[mealType]] {[[mealDay]]|}"
   - "What is being {made|had} for [[mealType]] {[[mealDay]]|}"
