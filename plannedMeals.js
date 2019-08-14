@@ -85,14 +85,14 @@ const plannedMeals = {
     // dynamodb does not allow changing the value of keys - so we need to delete and then create
     // because we dont actually have meal_date_ex and we need it to do an update - we will need to first do a query with a range
     var results = await this.checkDay({user_id, meal_day, meal_type, meal_name});
-    var record = results[0];
-    if (results.length>0) {
+
+    if (results.length>1) {
       // there was more than one entry with the same meal_name and meal_type
       console.log('WARNING: There were multiple items with: ', {user_id, meal_day, meal_name, meal_type});
       console.log('WARNING: Deleting and replacing with to: ', newRecVals);
     }
 
-    await dynDB.delete(record);
+    if (results.length>0) await dynDB.delete(results[0]);
 
     // create
     var newRec = {user_id, meal_day, meal_name, meal_type};
@@ -100,7 +100,17 @@ const plannedMeals = {
       newRec[k] = newRecVals[k];
     });
     await plannedMeals.write(newRec);
+  },
 
+  remove: async function({user_id, meal_day, meal_name, meal_type}) {
+    var results = await this.checkDay({user_id, meal_day, meal_type, meal_name});
+
+    if (results.length>1) {
+      // there was more than one entry with the same meal_name and meal_type
+      console.log('WARNING: There were multiple items with: ', {user_id, meal_day, meal_name, meal_type});
+    }
+
+    if (results.length>0) await dynDB.delete(results[0]);
   }
 
 };

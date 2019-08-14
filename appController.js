@@ -10,7 +10,7 @@ class AppController {
   }
 
   // utils
-  makeDevEasier(response) {
+  _makeDevEasier(response) {
     var dayProps = ['mealDay', 'newMealDay'];
     dayProps.forEach(d=>{
       if (response.get(d) === 'today') response.set(d, new Date());
@@ -22,13 +22,41 @@ class AppController {
     });
   }
 
-  // create records
-  async planMeal(response) {
-    this.makeDevEasier(response);
+  _dateToRelDay(mealDateEx) {
+    var dayStr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var monthStr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var today = new Date();
+    mealDateEx = new Date(mealDateEx.substring(0, 'YYYY-MM-DD'.length));
+    var dateDiff = mealDateEx.getUTCDate()-today.getUTCDate();
+    switch (dateDiff) {
+      case 0: return 'today';
+      case -1: return 'yesterday';
+      case -2: return 'day before yesterday';
+      case 1: return 'tomorrow';
+      case 2: return 'day after tomorrow';
+    }
+    if (dateDiff<0 && dateDiff>-7) {
+      return `on the last ${dayStr[mealDateEx.getUTCDay()]}`;
+    }
+    if (dateDiff>0 && dateDiff<7) {
+      return `on ${dayStr[mealDateEx.getUTCDay()]}`;
+      // return `on the coming ${dayStr[mealDateEx.getUTCDay()]}`;
+    }
+    return ` on the <say-as interpret-as="ordinal">${mealDateEx.getUTCDate()}</say-as> ${monthStr[mealDateEx.getUTCMonth()]}`;
+  }
 
+  _getMealDayDefaultingToToday(response) {
     var mealDay = response.get('mealDay');
     if (!mealDay) mealDay = new Date();
     if (mealDay instanceof Date) mealDay = mealDay.toISOString(); // no day means today
+    return mealDay;
+  }
+
+  // create records
+  async planMeal(response) {
+    this._makeDevEasier(response);
+
+    var mealDay = this._getMealDayDefaultingToToday(response);
 
     if (mealDay.indexOf('W') != -1) {
       // we do not support week's as days
@@ -72,10 +100,8 @@ class AppController {
   }
 
   async anyMealsPlannedGeneric(response) {
-    this.makeDevEasier(response);
-    var mealDay = response.get('mealDay');
-    if (!mealDay) mealDay = new Date();
-    if (mealDay instanceof Date) mealDay = mealDay.toISOString(); // no day means today
+    this._makeDevEasier(response);
+    var mealDay = this._getMealDayDefaultingToToday(response);
     response.set('mealDayPretty', this._dateToRelDay(mealDay));
     var results = await this.plannedMeals.checkDay({
       user_id: response.get('userId'),
@@ -106,29 +132,6 @@ class AppController {
     return 'nonePlannedThisWeek';
   }
 
-  _dateToRelDay(mealDateEx) {
-    var dayStr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    var monthStr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var today = new Date();
-    mealDateEx = new Date(mealDateEx.substring(0, 'YYYY-MM-DD'.length));
-    var dateDiff = mealDateEx.getUTCDate()-today.getUTCDate();
-    switch (dateDiff) {
-      case 0: return 'today';
-      case -1: return 'yesterday';
-      case -2: return 'day before yesterday';
-      case 1: return 'tomorrow';
-      case 2: return 'day after tomorrow';
-    }
-    if (dateDiff<0 && dateDiff>-7) {
-      return `on the last ${dayStr[mealDateEx.getUTCDay()]}`;
-    }
-    if (dateDiff>0 && dateDiff<7) {
-      return `on ${dayStr[mealDateEx.getUTCDay()]}`;
-      // return `on the coming ${dayStr[mealDateEx.getUTCDay()]}`;
-    }
-    return ` on the <say-as interpret-as="ordinal">${mealDateEx.getUTCDate()}</say-as> ${monthStr[mealDateEx.getUTCMonth()]}`;
-  }
-
   async anyMealsPlannedOpenEnded(response) {
     var results = await this.plannedMeals.checkWeek({
       user_id: response.get('userId'),
@@ -148,22 +151,33 @@ class AppController {
 
   // update records
   async updateDate(response) {
+    this._makeDevEasier(response);
     await this.plannedMeals.update({
       user_id: response.get('userId'),
-      meal_day: response.get('mealDay'),
+      meal_day: this._getMealDayDefaultingToToday(response),
       meal_type: response.get('mealType'),
       meal_name: response.get('mealName'),
     }, {meal_day: response.get('newMealDay')});
     response.set('mealDay', response.get('newMealDay'));
   }
   async updateMealType(response) {
+    this._makeDevEasier(response);
     await this.plannedMeals.update({
       user_id: response.get('userId'),
-      meal_day: response.get('mealDay'),
+      meal_day: this._getMealDayDefaultingToToday(response),
       meal_type: response.get('mealType'),
       meal_name: response.get('mealName'),
     }, {meal_type: response.get('newMealType')});
     response.set('mealType', response.get('newMealType'));
+  }
+  async removeMeal(response) {
+    this._makeDevEasier(response);
+    await this.plannedMeals.remove({
+      user_id: response.get('userId'),
+      meal_day: this._getMealDayDefaultingToToday(response),
+      meal_type: response.get('mealType'),
+      meal_name: response.get('mealName'),
+    });
   }
 };
 
