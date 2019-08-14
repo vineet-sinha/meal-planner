@@ -3,7 +3,7 @@
 
 This project implements a Voice App to help plan meals. The Voice Conversation is built using the [Violet](https://helloviolet.ai/) framework and is deployed using the [Serverless Framework](https://serverless.com/). The primary instance of this runs on [AWS Lambda](https://aws.amazon.com/lambda/) and [AWS DynamDB](https://aws.amazon.com/dynamodb/).
 
-### Running
+### Running (Locally)
 
 Running the code locally requires first installing Node.js and running:
 ```
@@ -28,4 +28,12 @@ node node_modules/violet/lib/violetToolSrvr.js
 Deploying the code can be done by:
 ```
 serverless deploy
+```
+
+### Debugging
+
+Once deployed the code logs can be retrieved by running:
+```
+serverless logs -f alexaHandler
+serverless logs -f googleHandler
 ```

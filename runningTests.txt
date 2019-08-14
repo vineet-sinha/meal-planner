@@ -4,6 +4,7 @@ mkdir testingModels
 
 ## ALEXA
 ### SETUP
+node app.js
 curl 'http://localhost:8080/alexa?schema=true&schemaType=askcli' --output testingModels/alexa/en-US.json
 
 ### RUN TESTS
