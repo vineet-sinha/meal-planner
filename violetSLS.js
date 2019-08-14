@@ -1,22 +1,11 @@
 'use strict';
 
 /////////////////////////////////////////
-// Utilities
-/////////////////////////////////////////
-const __isJSONHeader = (headers)=>{
-  // problem is that 'Content-Type' is case sensitive
-  var contType = headers['Content-Type'];
-  if (!contType) contType = headers['Content-type'];
-  //if (!contType) contType = headers['content-type'];
-
-  if (!contType) return false;
-  if (contType.indexOf('application/json') != -1) return true;
-  return false;
-};
-
-/////////////////////////////////////////
 // Setup
 /////////////////////////////////////////
+
+// enable logging of conversationEngine
+require('debug').enable('warn:*,engine:*');
 
 // initialize the engine - so that Violet does not launch the standalone server automatically
 require('violet').server();
@@ -64,13 +53,14 @@ platformsList.forEach(p=>{
         // console.log(`==> httpMethod - event.body: `, event.body);
         // console.log(`===> Headers: `, event.headers);
         request.body = request.body.body;
-        if (__isJSONHeader(event.headers)) request.body = JSON.parse(request.body);
-        console.log('*** Request received.... request: ', JSON.stringify(request.body, null, 2));
+        if (typeof request.body == 'string') request.body = JSON.parse(request.body);
       } else {
         // Lambda event requests (Used by Alexa Skill)
       }
 
+      // console.log('*** Request received: ', JSON.stringify(request.body, null, 2));
       await p.handleRequest(request, response);
+      // console.log('*** Returning response: ', JSON.stringify(response.body, null, 2));
 
       // console.log('*** Request handled.... response: ', JSON.stringify(response.body, null, 2));
       if (event.httpMethod) {
