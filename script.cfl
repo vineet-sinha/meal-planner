@@ -43,33 +43,29 @@
       <case value="planned">
         <say>We have [[mealName]] planned for [[mealType]] [[mealDayPretty]]</say>
         <decision>
-          <ask>Would you like to delay it</ask>
+          <ask>Would you like to remove or delay it</ask>
           <choice>
-            <expecting>{Yes|} {delay|change} it to [[newMealDay]]</expecting>
+            <expecting>{Yes|} {delay it|change it} to [[newMealDay]]</expecting>
             <expecting>{to|} [[newMealDay]]</expecting>
             <resolve value="app.updateDate(response)">
               <say>Updated [[mealName]] to now be made on [[mealDay]]</say>
+              <jump target="#anythingElse">
             </resolve>
           </choice>
           <choice>
-            <expecting>{Yes|} {change|} it to [[newMealType]]</expecting>
+            <expecting>{Yes|} {change it|} to [[newMealType]]</expecting>
             <expecting>{to|} [[newMealType]]</expecting>
             <resolve value="app.updateMealType(response)">
               <say>Updated [[mealName]] to now be made a [[mealType]]</say>
+              <jump target="#anythingElse">
             </resolve>
           </choice>
           <choice>
-            <expecting>Yes {Please|}</expecting>
-            <decision>
-              <ask>When would you like it to be</ask>
-              <choice>
-                <expecting>{On|} [[newMealDay]]</expecting>
-                <expecting>{Delay|Change} it to [[newMealDay]]</expecting>
-                <resolve value="app.updateDate(response)">
-                  <say>Updated [[mealName]] to now be made on [[mealDay]]</say>
-                </resolve>
-              </choice>
-            </decision>
+            <expecting>{Yes|} {cancel|remove|delete} {it|}</expecting>
+            <resolve value="app.removeMeal(response)">
+              <say>Cancelled [[mealName]]</say>
+              <jump target="#anythingElse">
+            </resolve>
           </choice>
           <choice>
             <expecting>No {thanks|}</expecting>
@@ -79,6 +75,7 @@
       </case>
       <case value="nonePlannedThisWeek">
         <say>Sorry, I do not have anything planned this week</say>
+        <jump target="#anythingElse">
       </case>
       <default>
         <say>Sorry, I am not sure</say>
@@ -94,15 +91,19 @@
           <say>We have [[mealName]] planned for [[mealDayPretty]]</say>
           <say>For [[mealDayPretty]] we have [[mealName]] planned</say>
         </sayOne>
+        <jump target="#anythingElse">
       </case>
       <case value="plannedButDifferentMeal">
         <say>Sorry, I do not have anything planned for [[mealType]] but do have plans for [[availMealType]]</say>
+        <jump target="#anythingElse">
       </case>
       <case value="plannedButOtherTimeInWeek">
         <say>Sorry, I do not have anything planned for [[mealDayPretty]] but do have plans for [[availMealDayPretty]]</say>
+        <jump target="#anythingElse">
       </case>
       <case value="nonePlannedThisWeek">
         <say>Sorry, I do not have anything planned this week</say>
+        <jump target="#anythingElse">
       </case>
       <default>
         <say>Sorry, I am not sure</say>
@@ -143,8 +144,7 @@
 
     <item name="mealDay" required>
       <ask>What day would you like to make it</ask>
-      <expecting>I would like to make it on [[mealDay]]</expecting>
-      <expecting>Make it on [[mealDay]]</expecting>
+      <expecting>{I would like to|} make it on [[mealDay]]</expecting>
       <expecting>[[mealDay]]</expecting>
     </item>
     <item name="mealType" required>
@@ -154,7 +154,8 @@
     </item>
     <item name="mealName" required>
       <ask>What would you like the meal to be called</ask>
-      <expecting>I would like to call it [[mealName]]</expecting>
+      <expecting>{I would like to|} call it [[mealName]]</expecting>
+      <expecting>[[mealName]]</expecting>
     </item>
     <resolve value="app.planMeal(response)">
       <sayOne>
@@ -167,7 +168,16 @@
         <say>We will be making [[mealName]] for [[mealType]] [[mealDayPretty]]</say>
         <say>[[mealDayPretty]] We will be making [[mealName]] for [[mealType]]</say>
       </sayOne>
+      <jump target="#anythingElse">
     </resolve>
   </dialog>
+
+  <scriptlet id="anythingElse">
+    <sayOne keepConversationRunning>
+      <say>Anything else.</say>
+      <say>Can I help you with anything else.</say>
+      <say>Will there be anything else.</say>
+    </sayOne>
+  </scriptlet>
 
 </app>
