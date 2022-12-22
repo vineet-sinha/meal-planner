@@ -10,7 +10,7 @@
   },
   "author": "Vineet Sinha",
   "devDependencies": {
-    "serverless-offline": "^4.10.3"
+    "serverless-offline": "^12.0.3"
   },
   "dependencies": {
     "aws-sdk": "^2.460.0",
